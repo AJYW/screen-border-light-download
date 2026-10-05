@@ -16,6 +16,16 @@
             color: #fff;
             min-height: 100vh;
             padding: 80px 20px 40px 20px;
+            position: relative;
+        }
+        #starCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
         }
         .navbar {
             position: fixed;
@@ -186,6 +196,7 @@
     </style>
 </head>
 <body>
+    <canvas id="starCanvas"></canvas>
     <nav class="navbar">
         <div class="nav-logo">屏幕边框氛围灯</div>
         <div class="nav-right">
@@ -367,6 +378,83 @@
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';
         }
+
+        // 星空粒子动画
+        const canvas = document.getElementById('starCanvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // 创建星星
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.3,
+                speedY: (Math.random() - 0.5) * 0.3,
+                opacity: Math.random() * 0.8 + 0.2
+            });
+        }
+
+        // 鼠标跟随星星
+        for (let i = 0; i < 30; i++) {
+            stars.push({
+                x: mouseX,
+                y: mouseY,
+                radius: Math.random() * 2 + 1,
+                speedX: 0,
+                speedY: 0,
+                opacity: 1,
+                followMouse: true
+            });
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            stars.forEach((star, index) => {
+                // 普通星星漂移
+                if (!star.followMouse) {
+                    star.x += star.speedX;
+                    star.y += star.speedY;
+                    if (star.x < 0) star.x = canvas.width;
+                    if (star.x > canvas.width) star.x = 0;
+                    if (star.y < 0) star.y = canvas.height;
+                    if (star.y > canvas.height) star.y = 0;
+                } else {
+                    // 跟随鼠标的星星缓慢跟随
+                    star.x += (mouseX - star.x) * 0.05;
+                    star.y += (mouseY - star.y) * 0.05;
+                }
+
+                // 闪烁效果
+                const flicker = star.opacity + Math.sin(Date.now() * 0.002 + index) * 0.2;
+                
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${flicker})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#fff';
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animateStars);
+        }
+        animateStars();
     </script>
 </body>
 </html>
