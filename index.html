@@ -67,6 +67,57 @@
             border-color: #00bcd4;
             color: #00bcd4;
         }
+        .theme-switch {
+            width: 50px;
+            height: 26px;
+            border-radius: 20px;
+            background: #333;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid #2a2a4a;
+            transition: all 0.3s;
+        }
+        .theme-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffd700;
+            transition: all 0.3s;
+        }
+        body.day-mode .theme-switch {
+            background: #87ceeb;
+        }
+        body.day-mode .theme-switch::after {
+            left: 26px;
+            background: #fff;
+        }
+        body.day-mode {
+            background: #e8f4fc;
+            color: #222;
+        }
+        body.day-mode .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid #d0e0f0;
+        }
+        body.day-mode .nav-btn {
+            border-color: #ccc;
+            color: #555;
+        }
+        body.day-mode .version-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid #d0e0f0;
+        }
+        body.day-mode #starCanvas {
+            background: linear-gradient(180deg, #e0f0ff 0%, #f5f9ff 100%);
+        }
+        body.day-mode .modal-content {
+            background: #fff;
+            color: #222;
+        }
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -202,6 +253,7 @@
         <div class="nav-right">
             <button class="nav-btn" onclick="showContact()">联系作者</button>
             <button class="nav-btn" onclick="showFeatures()">查看功能</button>
+            <div class="theme-switch" onclick="toggleTheme()" title="切换白天/黑夜模式"></div>
         </div>
     </nav>
 
@@ -378,6 +430,13 @@
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';
         }
+        let isDay = false;
+        function toggleTheme() {
+            isDay = !isDay;
+            document.body.classList.toggle('day-mode', isDay);
+            // 切换星星颜色
+            starColor = isDay ? 'rgba(100, 150, 200,' : 'rgba(255, 255, 255,';
+        }
 
         // 星空粒子动画
         const canvas = document.getElementById('starCanvas');
@@ -385,6 +444,7 @@
         let stars = [];
         let mouseX = window.innerWidth / 2;
         let mouseY = window.innerHeight / 2;
+        let starColor = 'rgba(255, 255, 255,';
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -448,9 +508,9 @@
                 
                 ctx.beginPath();
                 ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${flicker})`;
+                ctx.fillStyle = `${starColor} ${flicker})`;
                 ctx.shadowBlur = 10;
-                ctx.shadowColor = '#fff';
+                ctx.shadowColor = isDay ? '#87ceeb' : '#fff';
                 ctx.fill();
             });
 
