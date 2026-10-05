@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>屏幕边框氛围灯 - 官方下载站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #0a0a12;
+            color: #fff;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .header h1 {
+            font-size: 36px;
+            background: linear-gradient(90deg, #00bcd4, #9c27b0, #ff4081);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .header p {
+            color: #888;
+            font-size: 16px;
+        }
+        .version-card {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            border: 1px solid #2a2a4a;
+            transition: all 0.3s;
+        }
+        .version-card:hover {
+            border-color: #00bcd4;
+            transform: translateY(-2px);
+        }
+        .version-card.first {
+            border: 2px solid #4caf50;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f2027 100%);
+        }
+        .version-card.latest {
+            border: 2px solid #00bcd4;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        .version-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .tag-first {
+            background: #4caf50;
+            color: #000;
+            font-weight: bold;
+        }
+        .tag-latest {
+            background: #00bcd4;
+            color: #000;
+            font-weight: bold;
+        }
+        .tag-old {
+            background: #333;
+            color: #999;
+        }
+        .version-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .version-desc {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: linear-gradient(90deg, #00bcd4, #2196f3);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #555;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>屏幕边框氛围灯</h1>
+            <p>多功能 · 音乐律动频谱 · 沉浸式桌面氛围(付费,CNY 1)</p>
+        </div>
+
+        <div class="version-card first">
+            <span class="version-tag tag-first">推荐下载 · 解压即用</span>
+            <div class="version-name">v6.0.1 绿色版</div>
+            <div class="version-desc">
+                解压直接运行，无需安装，包含Gist云端卡密校验，后台管理完整功能，下载解压后直接双击ScreenBorderLight.exe即可使用。
+            </div>
+            <a href="屏幕氛围灯_v6.0.1_绿色版.zip" class="download-btn">下载绿色版ZIP</a>
+        </div>
+
+        <div class="version-card latest">
+            <span class="version-tag tag-latest">最新安装版</span>
+            <div class="version-name">v6.0.2 安装版</div>
+            <div class="version-desc">
+                修复音乐律动未开启时频谱条默认显示的问题，正规安装向导，下一步下一步安装，自动创建桌面快捷方式。
+            </div>
+            <a href="屏幕氛围灯_安装v6.0.2.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v6.0.1 安装版</div>
+            <div class="version-desc">接入Gist云端卡密系统，后台可查看卡密使用状态。</div>
+            <a href="屏幕氛围灯_安装v6.0.1.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v6.0.0 安装版</div>
+            <div class="version-desc">首次接入Gist云端卡密校验，商业化版本。</div>
+            <a href="屏幕氛围灯_安装v6.0.0.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v5.1.1 稳定版</div>
+            <div class="version-desc">稳定版，包含悬浮球面板、可拖动频谱条、换壁纸、官网导航、深浅色主题切换全部基础功能。</div>
+            <a href="屏幕氛围灯_安装v5.1.1.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v5.1.0</div>
+            <div class="version-desc">频谱条灵敏度自定义调节功能。</div>
+            <a href="屏幕氛围灯_安装v5.1.0.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v5.0.3</div>
+            <div class="version-desc">修复音乐律动卡顿问题，优化动画帧率。</div>
+            <a href="屏幕氛围灯_安装v5.0.3.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v5.0.2</div>
+            <div class="version-desc">修复频谱条跟随边框宽度位置错误问题。</div>
+            <a href="屏幕氛围灯_安装v5.0.2.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v5.0.1</div>
+            <div class="version-desc">悬浮球可折叠面板、可拖动面板位置。</div>
+            <a href="屏幕氛围灯_安装v5.0.1.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v5.0.0</div>
+            <div class="version-desc">开发者模式、授权文件保护功能加入。</div>
+            <a href="屏幕氛围灯_安装v5.0.0.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.1.1</div>
+            <div class="version-desc">换壁纸、安全官网导航功能加入。</div>
+            <a href="屏幕氛围灯_安装v4.1.1.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.1.0</div>
+            <div class="version-desc">深浅色主题切换功能。</div>
+            <a href="屏幕氛围灯_安装v4.1.0.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.0.4</div>
+            <div class="version-desc">修复面板拖动卡顿问题。</div>
+            <a href="屏幕氛围灯_安装v4.0.4.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.0.3</div>
+            <div class="version-desc">音乐律动灵敏度分左右独立调节。</div>
+            <a href="屏幕氛围灯_安装v4.0.3.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.0.2</div>
+            <div class="version-desc">修复频谱条一卡一卡动画不流畅问题。</div>
+            <a href="屏幕氛围灯_安装v4.0.2.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.0.1</div>
+            <div class="version-desc">频谱条顶部半透明渐变效果优化。</div>
+            <a href="屏幕氛围灯_安装v4.0.1.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="version-card">
+            <span class="version-tag tag-old">历史版本</span>
+            <div class="version-name">v4.0.0</div>
+            <div class="version-desc">大版本更新，音乐律动完整频谱效果加入。</div>
+            <a href="屏幕氛围灯_安装v4.0.0.exe" class="download-btn">下载安装包</a>
+        </div>
+
+        <div class="footer">
+            屏幕边框氛围灯全版本归档 · 1元激活永久使用 · 卡密联系作者购买
+        </div>
+    </div>
+</body>
+</html>
