@@ -15,26 +15,57 @@
             background: #0a0a12;
             color: #fff;
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 80px 20px 40px 20px;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #2a2a4a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 100;
+        }
+        .nav-logo {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00bcd4, #9c27b0, #ff4081);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-right {
+            display: flex;
+            gap: 16px;
+        }
+        .nav-btn {
+            padding: 8px 20px;
+            border-radius: 6px;
+            background: transparent;
+            border: 1px solid #2a2a4a;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .nav-btn:hover {
+            border-color: #00bcd4;
+            color: #00bcd4;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
         }
-        .header {
+        .subtitle {
             text-align: center;
-            margin-bottom: 60px;
-        }
-        .header h1 {
-            font-size: 36px;
-            background: linear-gradient(90deg, #00bcd4, #9c27b0, #ff4081);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 12px;
-        }
-        .header p {
             color: #888;
-            font-size: 16px;
+            font-size: 15px;
+            margin-bottom: 40px;
         }
         .version-card {
             background: #1a1a2e;
@@ -107,14 +138,64 @@
             color: #555;
             font-size: 13px;
         }
+        .modal-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+        .modal {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #2a2a4a;
+        }
+        .modal h3 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #00bcd4;
+        }
+        .modal p, .modal li {
+            color: #ccc;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+        .modal ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        .modal-close {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background: #00bcd4;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>屏幕边框氛围灯</h1>
-            <p>多功能 · 音乐律动频谱 · 沉浸式桌面氛围(付费,CNY 1)</p>
+    <nav class="navbar">
+        <div class="nav-logo">屏幕边框氛围灯</div>
+        <div class="nav-right">
+            <button class="nav-btn" onclick="showContact()">联系作者</button>
+            <button class="nav-btn" onclick="showFeatures()">查看功能</button>
         </div>
+    </nav>
+
+    <div class="container">
+        <p class="subtitle">多功能 · 音乐律动频谱 · 沉浸式桌面氛围(付费,CNY 1)</p>
 
         <div class="version-card first">
             <span class="version-tag tag-first">推荐下载 · 解压即用</span>
@@ -243,5 +324,47 @@
             屏幕边框氛围灯全版本归档 · 1元激活永久使用 · 卡密联系作者购买
         </div>
     </div>
+
+    <div class="modal-mask" id="contactModal">
+        <div class="modal">
+            <h3>联系作者</h3>
+            <p>购买卡密、反馈问题、功能建议请联系：</p>
+            <ul>
+                <li>QQ：作者QQ号（待补充）</li>
+                <li>微信：作者微信号（待补充）</li>
+                <li>价格：永久激活仅需1元，后续持续更新免费升级</li>
+            </ul>
+            <button class="modal-close" onclick="closeModal('contactModal')">关闭</button>
+        </div>
+    </div>
+
+    <div class="modal-mask" id="featureModal">
+        <div class="modal">
+            <h3>软件全部功能</h3>
+            <ul>
+                <li>屏幕四周边框渐变跑马灯，自由调节颜色、宽度、发光强度</li>
+                <li>音乐动感频谱律动，12根竖条跟随声音跳动，左右灵敏度独立调节</li>
+                <li>悬浮球面板，可拖动，一键展开/收起</li>
+                <li>自定义桌面壁纸功能，支持图片/视频</li>
+                <li>安全官网导航，直达Steam/酷狗/微信/QQ官方站点，防木马</li>
+                <li>深色/浅色主题切换</li>
+                <li>开发者模式（授权后可查看修改源代码）</li>
+                <li>正规安装向导，自动创建桌面快捷方式</li>
+            </ul>
+            <button class="modal-close" onclick="closeModal('featureModal')">关闭</button>
+        </div>
+    </div>
+
+    <script>
+        function showContact() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+        function showFeatures() {
+            document.getElementById('featureModal').style.display = 'flex';
+        }
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+    </script>
 </body>
 </html>
