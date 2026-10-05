@@ -405,16 +405,17 @@
             });
         }
 
-        // 鼠标跟随星星
-        for (let i = 0; i < 30; i++) {
+        // 鼠标跟随星星：10个小星星，带拖尾
+        for (let i = 0; i < 10; i++) {
             stars.push({
                 x: mouseX,
                 y: mouseY,
-                radius: Math.random() * 2 + 1,
+                radius: Math.random() * 1 + 0.5,
                 speedX: 0,
                 speedY: 0,
-                opacity: 1,
-                followMouse: true
+                opacity: 0.8 - i * 0.06,
+                followMouse: true,
+                trailIndex: i
             });
         }
 
@@ -436,9 +437,10 @@
                     if (star.y < 0) star.y = canvas.height;
                     if (star.y > canvas.height) star.y = 0;
                 } else {
-                    // 跟随鼠标的星星缓慢跟随
-                    star.x += (mouseX - star.x) * 0.05;
-                    star.y += (mouseY - star.y) * 0.05;
+                    // 跟随鼠标：越靠后的星星跟随越慢，形成0.2-0.35秒延迟拖尾
+                    const followSpeed = 0.03 + (10 - star.trailIndex) * 0.005;
+                    star.x += (mouseX - star.x) * followSpeed;
+                    star.y += (mouseY - star.y) * followSpeed;
                 }
 
                 // 闪烁效果
