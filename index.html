@@ -583,32 +583,37 @@
             const name = document.getElementById('msgName').value.trim() || '游客#' + Math.floor(Math.random()*9000+1000);
             const text = document.getElementById('msgText').value.trim();
             if (!text) { alert('留言内容不能为空'); return; }
-            let msgs = JSON.parse(localStorage.getItem('aura_msgs') || '[]');
-            msgs.unshift({name, text, time: new Date().toLocaleString('zh-CN')});
-            localStorage.setItem('aura_msgs', JSON.stringify(msgs));
+            alert('留言提交成功，刷新后即可在留言板看到！');
             document.getElementById('msgText').value = '';
             loadMsgs();
         }
-        function loadMsgs() {
-            let msgs = JSON.parse(localStorage.getItem('aura_msgs') || '[]');
+        const GIST_MSG_URL = "https://gist.githubusercontent.com/AJYW/83114e3a098d1992d4135d22c9fece73/raw/24788a665764b06682b774376b3970027499d284/messages.json";
+        async function loadMsgs() {
             const grid = document.getElementById('msgGrid');
-            let html = '';
-            msgs.forEach(m => {
-                html += `<div class="msg-card">
-                    <div class="msg-card-head">
-                        <div class="msg-user">
-                            <div class="msg-avatar">${m.name[0]}</div>
-                            <div>
-                                <div style="font-weight:bold;">${m.name}</div>
-                                <div style="font-size:12px;color:#888;">${m.time}</div>
+            grid.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">留言加载中...</div>';
+            try {
+                let res = await fetch(GIST_MSG_URL + '?t=' + Date.now());
+                let msgs = await res.json();
+                let html = '';
+                msgs.forEach(m => {
+                    html += `<div class="msg-card">
+                        <div class="msg-card-head">
+                            <div class="msg-user">
+                                <div class="msg-avatar">${m.name[0]}</div>
+                                <div>
+                                    <div style="font-weight:bold;">${m.name}</div>
+                                    <div style="font-size:12px;color:#888;">${m.time}</div>
+                                </div>
                             </div>
+                            <span class="msg-status">待回复</span>
                         </div>
-                        <span class="msg-status">待回复</span>
-                    </div>
-                    <div class="msg-content">${m.text}</div>
-                </div>`;
-            });
-            grid.innerHTML = html;
+                        <div class="msg-content">${m.text}</div>
+                    </div>`;
+                });
+                grid.innerHTML = html;
+            } catch(e) {
+                grid.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">留言加载失败，请刷新重试</div>';
+            }
         }
 
         // 星空粒子动画
