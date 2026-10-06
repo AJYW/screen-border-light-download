@@ -85,7 +85,7 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: #ffd700;
+            background: #ffffff;
             transition: all 0.3s;
         }
         body.day-mode .theme-switch {
@@ -93,7 +93,7 @@
         }
         body.day-mode .theme-switch::after {
             left: 26px;
-            background: #fff;
+            background: #cccccc;
         }
         body.day-mode {
             background: #e8f4fc;
@@ -117,6 +117,103 @@
         body.day-mode .modal-content {
             background: #fff;
             color: #222;
+        }
+        .msg-board-page {
+            display: none;
+        }
+        .msg-board-page.active {
+            display: block;
+        }
+        .download-page.hidden {
+            display: none;
+        }
+        .msg-header {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(30, 30, 60, 0.6);
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+        .msg-header h2 {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+        .msg-input-area {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #2a2a4a;
+        }
+        .msg-input-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .msg-input-row input {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0f0f1a;
+            color: #fff;
+            font-size: 14px;
+        }
+        .msg-send-btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            background: #1967d2;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .msg-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        .msg-card {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid #2a2a4a;
+        }
+        .msg-card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .msg-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .msg-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: #1967d2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #fff;
+        }
+        .msg-status {
+            font-size: 12px;
+            color: #ff9800;
+            background: rgba(255,152,0,0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .msg-content {
+            color: #ccc;
+            font-size: 14px;
+            line-height: 1.5;
         }
         .container {
             max-width: 800px;
@@ -251,6 +348,7 @@
     <nav class="navbar">
         <div class="nav-logo">屏幕边框氛围灯</div>
         <div class="nav-right">
+            <button class="nav-btn" onclick="showMsgBoard()">留言板</button>
             <button class="nav-btn" onclick="showContact()">联系作者</button>
             <button class="nav-btn" onclick="showFeatures()">查看功能</button>
             <div class="theme-switch" onclick="toggleTheme()" title="切换白天/黑夜模式"></div>
@@ -258,6 +356,7 @@
     </nav>
 
     <div class="container">
+        <div class="download-page" id="downloadPage">
         <p class="subtitle">多功能 · 音乐律动频谱 · 沉浸式桌面氛围(付费,CNY 1)</p>
 
         <div class="version-card first">
@@ -388,6 +487,37 @@
         <div class="footer">
             屏幕边框氛围灯全版本归档 · 1元激活永久使用 · 卡密联系作者购买
         </div>
+        </div>
+
+        <div class="msg-board-page" id="msgBoardPage">
+            <div class="msg-header">
+                <h2>留言板</h2>
+                <p>欢迎留言反馈问题、提功能建议，作者会持续更新维护</p>
+            </div>
+            <div class="msg-input-area">
+                <div style="font-weight:bold; margin-bottom:8px;">发表留言</div>
+                <div class="msg-input-row">
+                    <input type="text" id="msgName" placeholder="昵称（默认游客）">
+                    <input type="text" id="msgText" placeholder="写下你想说的话...">
+                    <button class="msg-send-btn" onclick="sendMsg()">发送</button>
+                </div>
+            </div>
+            <div class="msg-grid" id="msgGrid">
+                <div class="msg-card">
+                    <div class="msg-card-head">
+                        <div class="msg-user">
+                            <div class="msg-avatar">游</div>
+                            <div>
+                                <div style="font-weight:bold;">游客#001</div>
+                                <div style="font-size:12px;color:#888;">2026-10-06 10:00</div>
+                            </div>
+                        </div>
+                        <span class="msg-status">待回复</span>
+                    </div>
+                    <div class="msg-content">这个氛围灯太好看了！音乐律动很流畅</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal-mask" id="contactModal">
@@ -436,6 +566,49 @@
             document.body.classList.toggle('day-mode', isDay);
             // 切换星星颜色
             starColor = isDay ? 'rgba(100, 150, 200,' : 'rgba(255, 255, 255,';
+        }
+
+        function showMsgBoard() {
+            document.getElementById('downloadPage').classList.add('hidden');
+            document.getElementById('msgBoardPage').classList.add('active');
+            loadMsgs();
+        }
+        // 点logo回下载页
+        document.querySelector('.nav-logo').onclick = function() {
+            document.getElementById('downloadPage').classList.remove('hidden');
+            document.getElementById('msgBoardPage').classList.remove('active');
+        }
+
+        function sendMsg() {
+            const name = document.getElementById('msgName').value.trim() || '游客#' + Math.floor(Math.random()*9000+1000);
+            const text = document.getElementById('msgText').value.trim();
+            if (!text) { alert('留言内容不能为空'); return; }
+            let msgs = JSON.parse(localStorage.getItem('aura_msgs') || '[]');
+            msgs.unshift({name, text, time: new Date().toLocaleString('zh-CN')});
+            localStorage.setItem('aura_msgs', JSON.stringify(msgs));
+            document.getElementById('msgText').value = '';
+            loadMsgs();
+        }
+        function loadMsgs() {
+            let msgs = JSON.parse(localStorage.getItem('aura_msgs') || '[]');
+            const grid = document.getElementById('msgGrid');
+            let html = '';
+            msgs.forEach(m => {
+                html += `<div class="msg-card">
+                    <div class="msg-card-head">
+                        <div class="msg-user">
+                            <div class="msg-avatar">${m.name[0]}</div>
+                            <div>
+                                <div style="font-weight:bold;">${m.name}</div>
+                                <div style="font-size:12px;color:#888;">${m.time}</div>
+                            </div>
+                        </div>
+                        <span class="msg-status">待回复</span>
+                    </div>
+                    <div class="msg-content">${m.text}</div>
+                </div>`;
+            });
+            grid.innerHTML = html;
         }
 
         // 星空粒子动画
