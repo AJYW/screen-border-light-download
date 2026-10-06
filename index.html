@@ -490,13 +490,13 @@
         </div>
 
         <div class="msg-board-page" id="msgBoardPage">
-            <div class="msg-header">
-                <h2>留言板</h2>
-                <p>欢迎留言反馈问题、咨询购买、提功能建议，作者会持续更新维护</p>
-                <br>
-                <button class="download-btn" onclick="window.open('https://github.com/AJYW/screen-border-light-download/issues/new','_blank')">打开留言板写留言</button>
-                <br><br>
-                <a class="download-btn" style="background:#444;" href="https://github.com/AJYW/screen-border-light-download/issues" target="_blank">查看所有留言和回复</a>
+            <div class="msg-header" style="background:linear-gradient(180deg, rgba(100,180,255,0.15), transparent);padding:40px;border-radius:16px;margin-bottom:24px;">
+                <div style="width:60px;height:60px;background:#4d8cff;border-radius:16px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;">💬</div>
+                <h2 style="text-align:center;margin:0 0 12px;">留言板</h2>
+                <p style="text-align:center;opacity:0.7;margin:0;">欢迎留言反馈问题、咨询购买、提功能建议，作者会持续更新维护</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;">
+                <div id="giscus-thread"></div>
             </div>
         </div>
     </div>
@@ -559,50 +559,67 @@
             document.getElementById('downloadPage').classList.remove('hidden');
             document.getElementById('msgBoardPage').classList.remove('active');
         }
-
-        function sendMsg() {
+        const MSG_API = "https://jsonblob.com/api/jsonBlob/1327576802127052800";
+        async function sendMsg() {
             const name = document.getElementById('msgName').value.trim() || '游客#' + Math.floor(Math.random()*9000+1000);
             const text = document.getElementById('msgText').value.trim();
             if (!text) { alert('留言内容不能为空'); return; }
-            alert('留言提交成功，刷新后即可在留言板看到！');
-            document.getElementById('msgText').value = '';
-            loadMsgs();
+            try {
+                let res = await fetch(MSG_API);
+                let msgs = await res.json();
+                if (!Array.isArray(msgs)) msgs = [];
+                msgs.unshift({
+                    name: name,
+                    text: text,
+                    time: new Date().toLocaleString('zh-CN'),
+                    reply: ''
+                });
+                await fetch(MSG_API, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(msgs)
+                });
+                alert('留言发送成功！');
+                document.getElementById('msgText').value = '';
+                loadMsgs();
+            } catch(e) {
+                alert('发送失败，请检查网络后重试');
+            }
         }
-        const GIST_MSG_URL = "https://gist.githubusercontent.com/AJYW/83114e3a098d1992d4135d22c9fece73/raw/24788a665764b06682b774376b3970027499d284/messages.json";
         async function loadMsgs() {
             const grid = document.getElementById('msgGrid');
-            grid.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">留言加载中...</div>';
+            grid.innerHTML = '<div style="text-align:center;opacity:0.6;padding:40px;">留言加载中...</div>';
             try {
-                let res = await fetch(GIST_MSG_URL + '?t=' + Date.now());
+                let res = await fetch(MSG_API + '?t=' + Date.now());
                 let msgs = await res.json();
+                if (!Array.isArray(msgs)) msgs = [];
                 let html = '';
-                msgs.forEach(m => {
+                const colors = ['#4d8cff','#ff6b6b','#51cf66','#ffd43b','#cc5de8','#22b8cf','#ff922b'];
+                msgs.forEach((m,i) => {
                     let replyHtml = '';
                     if (m.reply) {
-                        replyHtml = `<div style="margin-top:10px;padding:10px;background:rgba(76,175,80,0.1);border-radius:8px;font-size:13px;color:#4caf50;">
+                        replyHtml = `<div style="margin-top:10px;padding:10px;background:rgba(76,175,80,0.15);border-radius:8px;font-size:13px;color:#4caf50;">
                             <b>管理员回复：</b>${m.reply}
                         </div>`;
-                    } else {
-                        replyHtml = '';
                     }
-                    html += `<div class="msg-card">
-                        <div class="msg-card-head">
-                            <div class="msg-user">
-                                <div class="msg-avatar">${m.name[0]}</div>
+                    html += `<div style="background:rgba(255,255,255,0.06);padding:16px;border-radius:12px;">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                            <div style="display:flex;align-items:center;gap:10px;">
+                                <div style="width:32px;height:32px;border-radius:8px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;">${m.name[0]}</div>
                                 <div>
                                     <div style="font-weight:bold;">${m.name}</div>
-                                    <div style="font-size:12px;color:#888;">${m.time}</div>
+                                    <div style="font-size:11px;opacity:0.6;">${m.time}</div>
                                 </div>
                             </div>
-                            <span class="msg-status">${m.reply ? '已回复' : '待回复'}</span>
+                            <span style="font-size:12px;padding:2px 8px;border-radius:10px;background:${m.reply?'rgba(76,175,80,0.2)':'rgba(255,152,0,0.2)'};color:${m.reply?'#4caf50':'#ff9800'};">${m.reply?'已回复':'待处理'}</span>
                         </div>
-                        <div class="msg-content">${m.text}</div>
+                        <div style="opacity:0.95;line-height:1.5;">${m.text}</div>
                         ${replyHtml}
                     </div>`;
                 });
                 grid.innerHTML = html;
             } catch(e) {
-                grid.innerHTML = '<div style="color:#888;text-align:center;padding:20px;">留言加载失败，请刷新重试</div>';
+                grid.innerHTML = '<div style="text-align:center;opacity:0.6;padding:40px;">留言加载失败，请刷新重试</div>';
             }
         }
 
