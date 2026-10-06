@@ -596,6 +596,14 @@
                 let msgs = await res.json();
                 let html = '';
                 msgs.forEach(m => {
+                    let replyHtml = '';
+                    if (m.reply) {
+                        replyHtml = `<div style="margin-top:10px;padding:10px;background:rgba(76,175,80,0.1);border-radius:8px;font-size:13px;color:#4caf50;">
+                            <b>管理员回复：</b>${m.reply}
+                        </div>`;
+                    } else {
+                        replyHtml = '';
+                    }
                     html += `<div class="msg-card">
                         <div class="msg-card-head">
                             <div class="msg-user">
@@ -605,9 +613,10 @@
                                     <div style="font-size:12px;color:#888;">${m.time}</div>
                                 </div>
                             </div>
-                            <span class="msg-status">待回复</span>
+                            <span class="msg-status">${m.reply ? '已回复' : '待回复'}</span>
                         </div>
                         <div class="msg-content">${m.text}</div>
+                        ${replyHtml}
                     </div>`;
                 });
                 grid.innerHTML = html;
