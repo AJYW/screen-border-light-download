@@ -495,8 +495,16 @@
                 <h2 style="text-align:center;margin:0 0 12px;">留言板</h2>
                 <p style="text-align:center;opacity:0.7;margin:0;">欢迎留言反馈问题、咨询购买、提功能建议，作者会持续更新维护</p>
             </div>
-            <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;">
-                <div id="giscus-thread"></div>
+            <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;margin-bottom:24px;">
+                <div style="font-weight:bold;margin-bottom:12px;">发表留言 <span style="font-size:12px;opacity:0.6;font-weight:normal;">昵称和留言内容至少填一项</span></div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <input type="text" id="msgName" placeholder="昵称（默认游客）" style="flex:1;min-width:150px;padding:10px 14px;border-radius:8px;border:none;background:rgba(255,255,255,0.1);color:#fff;outline:none;">
+                    <input type="text" id="msgText" placeholder="写下你想说的话..." style="flex:3;min-width:250px;padding:10px 14px;border-radius:8px;border:none;background:rgba(255,255,255,0.1);color:#fff;outline:none;">
+                    <button class="download-btn" onclick="sendMsg()">发送</button>
+                </div>
+            </div>
+            <div class="msg-grid" id="msgGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+                <div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">留言加载中...</div>
             </div>
         </div>
     </div>
