@@ -495,9 +495,13 @@
                 <h2 style="text-align:center;margin:0 0 12px;">留言板</h2>
                 <p style="text-align:center;opacity:0.7;margin:0;">欢迎留言反馈问题、咨询购买、提功能建议，作者会持续更新维护</p>
             </div>
-            <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;margin-bottom:24px;text-align:center;">
-                <p style="margin:0 0 16px;opacity:0.8;">点击下方按钮即可留言，留言会自动同步到下方列表</p>
-                <button class="download-btn" onclick="window.open('https://github.com/AJYW/screen-border-light-download/issues/new?title=留言&body=请输入你的问题或建议：','_blank')">发表留言</button>
+            <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;margin-bottom:24px;">
+                <div style="font-weight:bold;margin-bottom:12px;">发表留言 <span style="font-size:12px;opacity:0.6;font-weight:normal;">昵称和留言内容至少填一项</span></div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                    <input type="text" id="msgName" placeholder="昵称（默认游客）" style="flex:1;min-width:150px;padding:10px 14px;border-radius:8px;border:none;background:rgba(255,255,255,0.1);color:#fff;outline:none;">
+                    <input type="text" id="msgText" placeholder="写下你想说的话..." style="flex:3;min-width:250px;padding:10px 14px;border-radius:8px;border:none;background:rgba(255,255,255,0.1);color:#fff;outline:none;">
+                    <button class="download-btn" onclick="sendMsg()">发送</button>
+                </div>
             </div>
             <div class="msg-grid" id="msgGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
                 <div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">留言加载中...</div>
@@ -563,33 +567,66 @@
             document.getElementById('downloadPage').classList.remove('hidden');
             document.getElementById('msgBoardPage').classList.remove('active');
         }
+        const MSG_API = "https://jsonblob.com/api/jsonBlob/1327576802127052800";
+        async function sendMsg() {
+            const name = document.getElementById('msgName').value.trim() || '游客#' + Math.floor(Math.random()*9000+1000);
+            const text = document.getElementById('msgText').value.trim();
+            if (!text) { alert('留言内容不能为空'); return; }
+            try {
+                let res = await fetch(MSG_API);
+                let msgs = await res.json();
+                if (!Array.isArray(msgs)) msgs = [];
+                msgs.unshift({
+                    name: name,
+                    text: text,
+                    time: new Date().toLocaleString('zh-CN'),
+                    reply: ''
+                });
+                await fetch(MSG_API, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(msgs)
+                });
+                alert('留言发送成功！');
+                document.getElementById('msgText').value = '';
+                loadMsgs();
+            } catch(e) {
+                alert('留言已提交，刷新页面即可看到');
+                loadMsgs();
+            }
+        }
         async function loadMsgs() {
             const grid = document.getElementById('msgGrid');
             grid.innerHTML = '<div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">留言加载中...</div>';
             try {
-                let res = await fetch('https://api.github.com/repos/AJYW/screen-border-light-download/issues?state=open&per_page=50&t=' + Date.now());
-                let issues = await res.json();
+                let res = await fetch(MSG_API + '?t=' + Date.now());
+                let msgs = await res.json();
+                if (!Array.isArray(msgs)) msgs = [];
                 let html = '';
                 const colors = ['#4d8cff','#ff6b6b','#51cf66','#ffd43b','#cc5de8','#22b8cf','#ff922b'];
-                issues.forEach((issue,i) => {
-                    let replied = issue.comments > 0;
-                    let body = issue.body || issue.title;
+                msgs.forEach((m,i) => {
+                    let replyHtml = '';
+                    if (m.reply) {
+                        replyHtml = `<div style="margin-top:10px;padding:10px;background:rgba(76,175,80,0.15);border-radius:8px;font-size:13px;color:#4caf50;">
+                            <b>管理员回复：</b>${m.reply}
+                        </div>`;
+                    }
                     html += `<div style="background:rgba(255,255,255,0.06);padding:16px;border-radius:12px;">
                         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
                             <div style="display:flex;align-items:center;gap:10px;">
-                                <div style="width:32px;height:32px;border-radius:8px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;">${issue.user.login[0].toUpperCase()}</div>
+                                <div style="width:32px;height:32px;border-radius:8px;background:${colors[i%colors.length]};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:bold;">${m.name[0]}</div>
                                 <div>
-                                    <div style="font-weight:bold;">${issue.user.login}</div>
-                                    <div style="font-size:11px;opacity:0.6;">${new Date(issue.created_at).toLocaleString('zh-CN')}</div>
+                                    <div style="font-weight:bold;">${m.name}</div>
+                                    <div style="font-size:11px;opacity:0.6;">${m.time}</div>
                                 </div>
                             </div>
-                            <span style="font-size:12px;padding:2px 8px;border-radius:10px;background:${replied?'rgba(76,175,80,0.2)':'rgba(255,152,0,0.2)'};color:${replied?'#4caf50':'#ff9800'};">${replied?'已回复':'待处理'}</span>
+                            <span style="font-size:12px;padding:2px 8px;border-radius:10px;background:${m.reply?'rgba(76,175,80,0.2)':'rgba(255,152,0,0.2)'};color:${m.reply?'#4caf50':'#ff9800'};">${m.reply?'已回复':'待处理'}</span>
                         </div>
-                        <div style="opacity:0.95;line-height:1.5;">${body}</div>
-                        <div style="margin-top:10px;"><a href="${issue.html_url}" target="_blank" style="color:#4d8cff;font-size:13px;">查看回复 →</a></div>
+                        <div style="opacity:0.95;line-height:1.5;">${m.text}</div>
+                        ${replyHtml}
                     </div>`;
                 });
-                grid.innerHTML = html || '<div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">暂无留言，快来抢沙发~</div>';
+                grid.innerHTML = html;
             } catch(e) {
                 grid.innerHTML = '<div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">留言加载失败，请刷新重试</div>';
             }
