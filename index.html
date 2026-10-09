@@ -595,12 +595,40 @@
                             <span style="font-size:12px;padding:2px 8px;border-radius:10px;background:${replied?'rgba(76,175,80,0.2)':'rgba(255,152,0,0.2)'};color:${replied?'#4caf50':'#ff9800'};">${replied?'已回复':'待处理'}</span>
                         </div>
                         <div style="opacity:0.95;line-height:1.5;">${body}</div>
-                        <div style="margin-top:10px;"><a href="${issue.html_url}" target="_blank" style="color:#4d8cff;font-size:13px;">查看回复 →</a></div>
+                        <div style="margin-top:10px;">${replied ? `<button onclick="loadReplies(${issue.number})" style="cursor:pointer;background:rgba(77,140,255,0.15);color:#4d8cff;border:none;padding:6px 14px;border-radius:8px;font-size:13px;">查看回复（${issue.comments}）</button>` : '<span style="font-size:12px;opacity:0.45;">暂无回复</span>'}</div>
+                        <div id="replyBox_${issue.number}" style="display:none;margin-top:10px;border-top:1px dashed rgba(255,255,255,0.12);padding-top:10px;font-size:13px;"></div>
                     </div>`;
                 });
                 grid.innerHTML = html || '<div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">暂无留言，快来抢沙发~</div>';
             } catch(e) {
                 grid.innerHTML = '<div style="text-align:center;opacity:0.6;padding:40px;grid-column:1/-1;">留言加载失败，请刷新重试</div>';
+            }
+        }
+        // 站内直接加载某条留言的回复，不跳转GitHub
+        async function loadReplies(num) {
+            const box = document.getElementById('replyBox_' + num);
+            if (!box) return;
+            if (box.dataset.loaded) {
+                box.style.display = box.style.display === 'none' ? 'block' : 'none';
+                return;
+            }
+            box.style.display = 'block';
+            box.innerHTML = '<div style="opacity:0.6;padding:4px 0;">回复加载中...</div>';
+            try {
+                let res = await fetch('https://api.github.com/repos/AJYW/screen-border-light-download/issues/' + num + '/comments?t=' + Date.now());
+                let comments = await res.json();
+                if (!Array.isArray(comments) || comments.length === 0) {
+                    box.innerHTML = '<div style="opacity:0.6;padding:4px 0;">暂无回复</div>';
+                } else {
+                    box.innerHTML = comments.map(c => `
+                        <div style="background:rgba(255,255,255,0.05);padding:10px;border-radius:8px;margin-bottom:8px;">
+                            <div style="font-weight:bold;opacity:0.85;margin-bottom:4px;">${c.user.login} <span style="font-weight:normal;font-size:11px;opacity:0.55;">${new Date(c.created_at).toLocaleString('zh-CN')}</span></div>
+                            <div style="opacity:0.95;line-height:1.5;">${c.body || ''}</div>
+                        </div>`).join('');
+                }
+                box.dataset.loaded = '1';
+            } catch(e) {
+                box.innerHTML = '<div style="opacity:0.6;padding:4px 0;">回复加载失败，请刷新重试</div>';
             }
         }
 
