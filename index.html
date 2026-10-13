@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>屏幕边框氛围灯 - 官方下载站</title>
+    <title>光 潮 - 官方下载站</title>
     <style>
         * {
             margin: 0;
@@ -426,7 +426,7 @@
 <body>
     <canvas id="starCanvas"></canvas>
     <nav class="navbar">
-        <div class="nav-logo">屏幕边框氛围灯</div>
+        <div class="nav-logo">光 潮</div>
         <div class="nav-right">
             <button class="nav-btn" onclick="showMsgBoard()">留言板</button>
             <button class="nav-btn" onclick="showContact()">联系作者</button>
@@ -567,7 +567,7 @@
         </div>
 
         <div class="footer">
-            屏幕边框氛围灯全版本归档 · 1元激活永久使用 · 卡密联系作者购买
+            屏幕氛围灯(光 潮)4.0版本以上归档 · 1元激活使用 · 卡密联系作者购买
         </div>
         </div>
 
@@ -575,7 +575,7 @@
             <div class="msg-header" style="background:linear-gradient(180deg, rgba(100,180,255,0.15), transparent);padding:40px;border-radius:16px;margin-bottom:24px;">
                 <div style="width:60px;height:60px;background:#4d8cff;border-radius:16px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;">💬</div>
                 <h2 style="text-align:center;margin:0 0 12px;">留言板</h2>
-                <p style="text-align:center;opacity:0.7;margin:0;">欢迎留言反馈问题、咨询购买、提功能建议，作者会持续更新维护</p>
+                <p style="text-align:center;opacity:0.7;margin:0;">欢迎留言反馈问题、咨询购买、提功能建议，持续更新维护</p>
             </div>
             <div style="background:rgba(255,255,255,0.05);padding:20px;border-radius:12px;margin-bottom:24px;text-align:center;">
                 <p style="margin:0 0 16px;opacity:0.8;">点击下方按钮即可留言，留言自动显示在下方列表</p>
@@ -594,7 +594,7 @@
             <ul>
                 <li>QQ：作者QQ号（待补充）</li>
                 <li>微信：作者微信号（待补充）</li>
-                <li>价格：永久激活仅需1元，后续持续更新免费升级</li>
+                <li>价格：激活仅需1元</li>
             </ul>
             <button class="modal-close" onclick="closeModal('contactModal')">关闭</button>
         </div>
@@ -604,7 +604,7 @@
         <div class="modal">
             <h3>软件全部功能</h3>
             <ul>
-                <li>屏幕四周边框渐变跑马灯，自由调节颜色、宽度、发光强度</li>
+                <li>屏幕边框渐变氛围灯，自由调节颜色、宽度、发光强度</li>
                 <li>音乐动感频谱律动，12根竖条跟随声音跳动，左右灵敏度独立调节</li>
                 <li>悬浮球面板，可拖动，一键展开/收起</li>
                 <li>自定义桌面壁纸功能，支持图片/视频</li>
@@ -772,7 +772,7 @@
         resizeCanvas();
 
         // 创建星星
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 249; i++) {
             stars.push({
                 x: Math.random() * canvas.width,
                 y: Math.random() * canvas.height,
@@ -784,7 +784,7 @@
         }
 
         // 鼠标跟随星星：10个小星星，带拖尾
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 1; i++) {
             stars.push({
                 x: mouseX,
                 y: mouseY,
@@ -816,7 +816,7 @@
                     if (star.y > canvas.height) star.y = 0;
                 } else {
                     // 跟随鼠标：越靠后的星星跟随越慢，形成0.2-0.35秒延迟拖尾
-                    const followSpeed = 0.03 + (10 - star.trailIndex) * 0.005;
+                    const followSpeed = 0.02 + (1 - star.trailIndex) * 0.005;
                     star.x += (mouseX - star.x) * followSpeed;
                     star.y += (mouseY - star.y) * followSpeed;
                 }
